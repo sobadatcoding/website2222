@@ -5921,3 +5921,17 @@ SkySphere.prototype.addConstellationLabel = function (ra, dec, labelText, textSt
   this.constellationLabels.push(label);
   return label;
 };
+// Assuming the RA and Dec for the center of the Big Dipper are 11h and +50° respectively
+var ra = 11; // in hours
+var dec = 50; // in degrees
+
+// Convert RA from hours to degrees
+ra = ra * 15;
+
+// Define the label text and style
+var labelText = "Big Dipper";
+var textStyle = { font: '12px Arial', color: '#ffffff' };
+
+// Add the label to the SkySphere
+SkySphere.prototype.addConstellationLabel(ra, dec, labelText, textStyle);
+/*This (above) is an initial prototype code by CoPilot*/
