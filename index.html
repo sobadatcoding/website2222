@@ -1,1 +1,12 @@
-Test website 1
+<canvas id="sky"></canvas>
+<script src="sky-sphere.js"></script>
+
+var sky = new SkySphere('sky', {
+    width: 800,
+    height: 400,
+    customOnClick: function(data) {
+        // Define your custom action for added objects.
+    }
+});
+sky.drawSky();
+
