@@ -5907,3 +5907,46 @@ SkySphere = function (constellations) {
 }(constellations);
 return SkySphere;
 }));
+
+// Get the element you want to apply the zoom to
+const zoomElement = document.getElementById('zoom-target');
+
+// Variables to track touch positions
+let initialDistance = null;
+let initialScale = 1;
+
+function getDistance(touches) {
+  const touch1 = touches[0];
+  const touch2 = touches[1];
+  const dx = touch1.pageX - touch2.pageX;
+  const dy = touch1.pageY - touch2.pageY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+zoomElement.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 2) {
+    // Two finger touch started
+    initialDistance = getDistance(e.touches);
+  }
+}, false);
+
+zoomElement.addEventListener('touchmove', function(e) {
+  e.preventDefault(); // Prevent page scrolling
+  if (e.touches.length === 2) {
+    // Calculate the new distance between touches
+    const newDistance = getDistance(e.touches);
+    // Calculate the scale factor
+    const scaleFactor = newDistance / initialDistance;
+    // Set the new scale based on the initial scale
+    const newScale = initialScale * scaleFactor;
+    // Apply the transformation
+    zoomElement.style.transform = `scale(${newScale})`;
+  }
+}, false);
+
+zoomElement.addEventListener('touchend', function(e) {
+  if (e.touches.length < 2) {
+    // Reset initial distance for the next zoom
+    initialDistance = null;
+  }
+}, false);
