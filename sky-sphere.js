@@ -5917,8 +5917,23 @@ SkySphere = function (constellations) {
     skyPoint.text = text; // Add this line to store the text in the skyPoint !HERE IS A CHANGE!
     this.objectPoints.push(skyPoint);
     return skyPoint;
-  };  
+  }; 
+  // Add your words here
+var raHours = 0; // Your RA value in hours
+var raMinutes = 59; // Your RA value in minutes
+var raSeconds = 21.7; // Your RA value in seconds
+var decDegrees = 62; // Your DEC value in degrees
+var decArcminutes = 10; // Your DEC value in arcminutes
+var decArcseconds = 8.9; // Your DEC value in arcseconds
+var text = 'Cassiopeia';
+
+var raDegrees = raToDegrees(raHours, raMinutes, raSeconds);
+var decDegrees = decToDegrees(decDegrees, decArcminutes, decArcseconds);
+sky.addCustomObject(raDegrees, decDegrees, {}, text);
+
+// Repeat for all 88 words
+// ...
   return SkySphere;
 }(constellations);
 return SkySphere;
-}));
+})); 
