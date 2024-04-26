@@ -5468,13 +5468,6 @@ constellations = {
     ]
   ]
 };
-function decToDegrees(degrees, arcminutes, arcseconds) {
-  return degrees + arcminutes / 60 + arcseconds / 3600;
-}
-function raToDegrees(hours, minutes, seconds) {
-  var totalHours = hours + minutes / 60 + seconds / 3600;
-  return totalHours * 15; // Multiply by 15 because each hour corresponds to 15 degrees
-};
 SkySphere = function (constellations) {
   // Frame Per Second: used in browser that don't support requestAnimationFrame.
   var FPS = 15;
@@ -5727,15 +5720,8 @@ SkySphere = function (constellations) {
         radius = skyPoint.data.radius || 2;
         context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
         context.fill();
-    
-        // Add this block to render the text
-        if (skyPoint.text) {
-          context.font = '12px Arial'; // Set the font size and family
-          context.fillStyle = '#ffffff'; // Set the text color
-          context.fillText(skyPoint.text, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
-        }
       }
-    }    
+    }
     if (this.overObjectIndex !== null) {
       var highlightSize = this.options.highlightSize || 3;
       context.lineWidth = highlightSize;
@@ -5912,28 +5898,12 @@ SkySphere = function (constellations) {
    * <li><strong>custom properties</strong>: properties that could be used inside <strong>customOnClick</strong> or <strong>getObjectText</strong> functions.</li>
    * </ul>
    */
-  SkySphere.prototype.addCustomObject = function (ra, dec, data, text) {
+  SkySphere.prototype.addCustomObject = function (ra, dec, data) {
     var skyPoint = this.generateSkyPoint(ra2rad(ra), dec2rad(dec), data);
-    skyPoint.text = text; // Add this line to store the text in the skyPoint !HERE IS A CHANGE!
     this.objectPoints.push(skyPoint);
     return skyPoint;
-  }; 
-  // Add your words here
-var raHours = 0; // Your RA value in hours
-var raMinutes = 59; // Your RA value in minutes
-var raSeconds = 21.7; // Your RA value in seconds
-var decDegrees = 62; // Your DEC value in degrees
-var decArcminutes = 10; // Your DEC value in arcminutes
-var decArcseconds = 8.9; // Your DEC value in arcseconds
-var text = 'Cassiopeia';
-
-var raDegrees = raToDegrees(raHours, raMinutes, raSeconds);
-var decDegrees = decToDegrees(decDegrees, decArcminutes, decArcseconds);
-sky.addCustomObject(raDegrees, decDegrees, {}, text);
-
-// Repeat for all 88 words
-// ...
+  };
   return SkySphere;
 }(constellations);
 return SkySphere;
-})); 
+}));
