@@ -8,5 +8,22 @@ var sky = new SkySphere('sky', {
         // Define your custom action for added objects.
     }
 });
+
+// Add your words here
+var raHours = 14; // Your RA value in hours
+var raMinutes = 31; // Your RA value in minutes
+var raSeconds = 57.1; // Your RA value in seconds
+var decDegrees = 26; // Your DEC value in degrees
+var decArcminutes = 47; // Your DEC value in arcminutes
+var decArcseconds = 56.3; // Your DEC value in arcseconds
+var text = 'Boötes';
+
+var decDegrees = decToDegrees(decDegrees, decArcminutes, decArcseconds);
+var raDegrees = raToDegrees(raHours, raMinutes, raSeconds);
+sky.addCustomObject(raDegrees, decDegrees, {}, text);
+
+// Repeat for all 88 words
+// ...
+
 sky.drawSky();
 </script>

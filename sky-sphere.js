@@ -5468,6 +5468,13 @@ constellations = {
     ]
   ]
 };
+function decToDegrees(degrees, arcminutes, arcseconds) {
+  return degrees + arcminutes / 60 + arcseconds / 3600;
+}
+function raToDegrees(hours, minutes, seconds) {
+  var totalHours = hours + minutes / 60 + seconds / 3600;
+  return totalHours * 15; // Multiply by 15 because each hour corresponds to 15 degrees
+};
 SkySphere = function (constellations) {
   // Frame Per Second: used in browser that don't support requestAnimationFrame.
   var FPS = 15;
@@ -5720,8 +5727,15 @@ SkySphere = function (constellations) {
         radius = skyPoint.data.radius || 2;
         context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
         context.fill();
+    
+        // Add this block to render the text
+        if (skyPoint.text) {
+          context.font = '12px Arial'; // Set the font size and family
+          context.fillStyle = '#ffffff'; // Set the text color
+          context.fillText(skyPoint.text, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
+        }
       }
-    }
+    }    
     if (this.overObjectIndex !== null) {
       var highlightSize = this.options.highlightSize || 3;
       context.lineWidth = highlightSize;
@@ -5898,40 +5912,13 @@ SkySphere = function (constellations) {
    * <li><strong>custom properties</strong>: properties that could be used inside <strong>customOnClick</strong> or <strong>getObjectText</strong> functions.</li>
    * </ul>
    */
-  SkySphere.prototype.addCustomObject = function (ra, dec, data) {
+  SkySphere.prototype.addCustomObject = function (ra, dec, data, text) {
     var skyPoint = this.generateSkyPoint(ra2rad(ra), dec2rad(dec), data);
+    skyPoint.text = text; // Add this line to store the text in the skyPoint !HERE IS A CHANGE!
     this.objectPoints.push(skyPoint);
     return skyPoint;
-  };
+  };  
   return SkySphere;
 }(constellations);
 return SkySphere;
 }));
-/*This is where the base code ends
-*I am now using CoPilot to plot text over the centres of constellations (Ra and Dec values I am calculating)
-*The code below is what CoPilot (Microsoft) generated for me.
-*/ 
-SkySphere.prototype.addConstellationLabel = function (ra, dec, labelText, textStyle) {
-  var labelPosition = this.generateSkyPoint(ra2rad(ra), dec2rad(dec));
-  var label = {
-    text: labelText,
-    style: textStyle || { font: '12px Arial', color: '#ffffff' },
-    position: labelPosition
-  };
-  this.constellationLabels.push(label);
-  return label;
-};
-// Assuming the RA and Dec for the center of the Big Dipper are 11h and +50° respectively
-var ra = 11; // in hours
-var dec = 50; // in degrees
-
-// Convert RA from hours to degrees
-ra = ra * 15;
-
-// Define the label text and style
-var labelText = "Big Dipper";
-var textStyle = { font: '12px Arial', color: '#ffffff' };
-
-// Add the label to the SkySphere
-SkySphere.prototype.addConstellationLabel(ra, dec, labelText, textStyle);
-/*This (above) is an initial prototype code by CoPilot*/
