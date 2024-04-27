@@ -5521,7 +5521,7 @@ SkySphere = function (constellations) {
   }
     // Define the constellation data array
     var constellationLabels = [
-      { name: "Orion", ra: 55, dec: -50 }, // Example values
+      { name: "Cassiopeia", ra: 15, dec: 62 }, // Example values
       // ... Add all 88 constellations with their R.A. and declination
     ];
   /**
@@ -5782,7 +5782,11 @@ SkySphere = function (constellations) {
     for (i = 0; i < this.objectPoints.length; i++) {
       transform(this.objectPoints[i]);
     }
-  };
+    // Update constellation labels
+    for (i = 0; i < this.constellationLabels.length; i++) {
+      transform(this.constellationLabels[i]);
+    }
+  };  
   /**
    * Rotate the sphere using the mouse drag.
    * @private
