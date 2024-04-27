@@ -5784,15 +5784,10 @@ SkySphere = function (constellations) {
     }
     // Update constellation labels
     for (i = 0; i < this.constellationLabels.length; i++) {
-      transform(this.constellationLabels[i]);
+      var label = this.constellationLabels[i];
+      transform(label.position);
     }
-  };  
-  /**
-   * Rotate the sphere using the mouse drag.
-   * @private
-   * @param {float} dx - position offset on x axis.
-   * @param {float} dy - position offset on y axis.
-   */
+  };
   SkySphere.prototype.rotateXY = function (dx, dy) {
     var x, y, z, k;
     var sindx = Math.sin(dx), cosdx = Math.cos(dx), sindy = Math.sin(dy), cosdy = Math.cos(dy);
