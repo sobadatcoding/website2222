@@ -5519,11 +5519,6 @@ SkySphere = function (constellations) {
       }
     }  // else skip frame
   }
-    // Define the constellation data array
-    var constellationLabels = [
-      { name: "Cassiopeia", ra: 15, dec: 62 }, // Example values
-      // ... Add all 88 constellations with their R.A. and declination
-    ];
   /**
    * Represents a sky map.
    * @constructor
@@ -5750,18 +5745,7 @@ SkySphere = function (constellations) {
       }
       context.lineWidth = 1;
     }
-    // Draw constellation labels
-    for (i = 0; i < constellationLabels.length; i++) {
-      var label = constellationLabels[i];
-      skyPoint = this.generateSkyPoint(ra2rad(label.ra), dec2rad(label.dec));
-      if (skyPoint.z > 0) { // Only draw if the label is on the front side of the sphere
-        context.fillStyle = 'white'; // Set text color
-        context.font = '14px Arial'; // Set text font and size
-        context.textAlign = 'center'; // Center the text on the skyPoint
-        context.fillText(label.name, skyPoint.x, skyPoint.y);
-      }
-    }
-  };  
+  };
   /**
    * Apply a transformation to all elements of the sky.
    * @param {function} transform - function to apply to each sky point passed as argument.
@@ -5782,12 +5766,13 @@ SkySphere = function (constellations) {
     for (i = 0; i < this.objectPoints.length; i++) {
       transform(this.objectPoints[i]);
     }
-    // Update constellation labels
-    for (i = 0; i < this.constellationLabels.length; i++) {
-      var label = this.constellationLabels[i];
-      transform(label.position);
-    }
   };
+  /**
+   * Rotate the sphere using the mouse drag.
+   * @private
+   * @param {float} dx - position offset on x axis.
+   * @param {float} dy - position offset on y axis.
+   */
   SkySphere.prototype.rotateXY = function (dx, dy) {
     var x, y, z, k;
     var sindx = Math.sin(dx), cosdx = Math.cos(dx), sindy = Math.sin(dy), cosdy = Math.cos(dy);
