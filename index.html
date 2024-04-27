@@ -1,19 +1,12 @@
 <canvas id="sky"></canvas>
 <script src="sky-sphere.js"></script>
 <script>
-// Define options for SkySphere
-var options = {
+var sky = new SkySphere('sky', {
     width: 600,
     height: 600,
     customOnClick: function(data) {
         // Define your custom action for added objects.
-    } // Missing closing bracket for customOnClick function
-};
-
-// Create a new SkySphere instance with the defined options
-var sky = new SkySphere('sky', options);
-
-// Example usage:
-sky.addTextLabel(6.752, -16.716, 'Orion', { font: '14px Arial', color: '#FFD700' });
+    }
+});
 sky.drawSky();
 </script>

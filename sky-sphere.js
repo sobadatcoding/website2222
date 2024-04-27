@@ -5663,13 +5663,6 @@ SkySphere = function (constellations) {
       }
     });
   };
-  // Add a method to add text labels
-  SkySphere.prototype.addTextLabel = function(ra, dec, text, options) {
-    var skyPoint = this.generateSkyPoint(ra2rad(ra), dec2rad(dec));
-    skyPoint.text = text;
-    skyPoint.options = options || {};
-    this.objectPoints.push(skyPoint); // Store the text label with other objects
-  };
   SkySphere.prototype.setRadius = function (radius) {
     this.zoom(radius / this.radius);
   };
@@ -5729,14 +5722,6 @@ SkySphere = function (constellations) {
         context.fill();
       }
     }
-    for (var i = 0; i < this.objectPoints.length; i++) {
-      var obj = this.objectPoints[i];
-      if (obj.z >= 0 && obj.text) { // Check if it's a text label
-        this.context.fillStyle = obj.options.color || '#FFFFFF';
-        this.context.font = obj.options.font || '15px Arial';
-        this.context.fillText(obj.text, Math.floor(obj.x), Math.floor(obj.y));
-      }
-    }
     if (this.overObjectIndex !== null) {
       var highlightSize = this.options.highlightSize || 3;
       context.lineWidth = highlightSize;
@@ -5765,7 +5750,6 @@ SkySphere = function (constellations) {
    * Apply a transformation to all elements of the sky.
    * @param {function} transform - function to apply to each sky point passed as argument.
    */
-  // Modify the applyTransform method to include text labels in transformations
   SkySphere.prototype.applyTransform = function (transform) {
     var i;
     // Update constellation lines
@@ -5778,14 +5762,9 @@ SkySphere = function (constellations) {
     for (i = 0; i < this.starPoints.length; i++) {
       transform(this.starPoints[i]);
     }
-    // Update custom objects and text labels
+    // Update custom objects
     for (i = 0; i < this.objectPoints.length; i++) {
-      var obj = this.objectPoints[i];
-      transform(obj);
-      // If the object has text, update its position
-      if (obj.text) {
-        transform(obj);
-      }
+      transform(this.objectPoints[i]);
     }
   };
   /**
