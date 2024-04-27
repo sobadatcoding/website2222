@@ -5885,6 +5885,13 @@ SkySphere = function (constellations) {
       this.zoom(Math.min(width, height) * (paddingPercentage || 0.9) / (2 * this.radius));
     }
   };
+  // Add a new method to add text labels
+  SkySphere.prototype.addTextLabel = function (ra, dec, text, style) {
+  var skyPoint = this.generateSkyPoint(ra2rad(ra), dec2rad(dec));
+  skyPoint.text = text;
+  skyPoint.style = style || { font: '15px Arial', color: '#fff' };
+  this.objectPoints.push(skyPoint);
+};
   /**
    * Add a custom object point.
    * @param {float} ra - Right Ascension (in hours, from 0 to 24)
