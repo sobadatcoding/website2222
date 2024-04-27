@@ -5519,6 +5519,11 @@ SkySphere = function (constellations) {
       }
     }  // else skip frame
   }
+    // Define the constellation data array
+    var constellationLabels = [
+      { name: "Orion", ra: 5.5, dec: -5 }, // Example values
+      // ... Add all 88 constellations with their R.A. and declination
+    ];
   /**
    * Represents a sky map.
    * @constructor
@@ -5745,6 +5750,17 @@ SkySphere = function (constellations) {
       }
       context.lineWidth = 1;
     }
+    // Draw constellation labels
+  for (var i = 0; i < constellationLabels.length; i++) {
+    var label = constellationLabels[i];
+    var skyPoint = this.generateSkyPoint(ra2rad(label.ra), dec2rad(label.dec));
+    if (skyPoint.z > 0) { // Only draw if the label is on the front side of the sphere
+      this.context.fillStyle = 'white'; // Set text color
+      this.context.font = '14px Arial'; // Set text font and size
+      this.context.textAlign = 'center'; // Center the text on the skyPoint
+      this.context.fillText(label.name, skyPoint.x, skyPoint.y);
+    }
+  }
   };
   /**
    * Apply a transformation to all elements of the sky.
