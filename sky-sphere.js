@@ -5760,21 +5760,14 @@ SkySphere = function (constellations) {
         context.lineWidth = 1;
     }
   };
-  SkySphere.prototype.generateConstellationLabel = function(name, raHours, raMinutes, raSeconds, decDegrees, decArcminutes, decArcseconds) {
-    // Convert RA from hours/minutes/seconds to radians
-    const raRadians = ra2rad((raHours + raMinutes / 60 + raSeconds / 3600) * 15);
-
-    // Convert DEC from degrees/arcminutes/arcseconds to radians
-    const decRadians = dec2rad(decDegrees + decArcminutes / 60 + decArcseconds / 3600);
-
+  SkySphere.prototype.generateConstellationLabel = function(name, ra, dec) {
     const label = {
         name: name,
-        ra: raRadians,
-        dec: decRadians,
+        ra: ra2rad(ra),
+        dec: dec2rad(dec),
         color: '#ffffff', // You can customize the label color here
         radius: 10 // Adjust the label size as needed
     };
-
     const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
     this.constellationLabels.push(skyPoint);
     return skyPoint;

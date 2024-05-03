@@ -8,13 +8,13 @@
             // Define your custom action for added objects.
         }
     });
-    
+
     // Create the SkySphere instance and add constellation labels here
     const skySphere = sky; // Use the existing 'sky' instance
 
     // Add constellation labels
-    skySphere.generateConstellationLabel('Orion', 5, 33, 32.4, 5, 45, 12.8); // Replace with the actual RA and DEC values for Orion
-    skySphere.generateConstellationLabel('Taurus', 4, 28, 12.7, 17, 59, 12.8); // Replace with the actual RA and DEC values for Taurus
+    skySphere.generateConstellationLabel('Orion', 83.385, 5.754); // Replace with the actual RA and DEC values for Orion
+    skySphere.generateConstellationLabel('Taurus', 4.52, 16.62); // Replace with the actual RA and DEC values for Taurus
     // Add more constellations as needed
 
     sky.drawSky();
