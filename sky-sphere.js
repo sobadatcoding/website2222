@@ -5725,7 +5725,7 @@ SkySphere = function (constellations) {
     }
 
     // Draw constellation labels
-    context.font = this.options.font || '15px Arial';
+    context.font = this.options.font || '15px serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     for (i = 0; i < this.constellationLabels.length; i++) {
@@ -5760,14 +5760,21 @@ SkySphere = function (constellations) {
         context.lineWidth = 1;
     }
   };
-  SkySphere.prototype.generateConstellationLabel = function(name, ra, dec) {
+  SkySphere.prototype.generateConstellationLabel = function(name, raHours, raMinutes, raSeconds, decDegrees, decArcminutes, decArcseconds) {
+    // Convert RA from hours/minutes/seconds to decimal
+    const raDecimal = raHours + raMinutes / 60 + raSeconds / 3600;
+
+    // Convert DEC from degrees/arcminutes/arcseconds to decimal
+    const decDecimal = decDegrees + decArcminutes / 60 + decArcseconds / 3600;
+
     const label = {
         name: name,
-        ra: ra2rad(ra),
-        dec: dec2rad(dec),
-        color: '#ffffff', // You can customize the label color here
-        radius: 10 // Adjust the label size as needed
+        ra: ra2rad(raDecimal), // Apply ra2rad to the decimal RA
+        dec: dec2rad(decDecimal), // Apply dec2rad to the decimal DEC
+        color: '#ffff00',
+        radius: 10
     };
+
     const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
     this.constellationLabels.push(skyPoint);
     return skyPoint;
