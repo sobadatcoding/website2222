@@ -5548,6 +5548,7 @@ SkySphere = function (constellations) {
   SkySphere.prototype.starPoints = [];
   SkySphere.prototype.objectPoints = [];
   SkySphere.prototype.isMoving = false;
+  SkySphere.prototype.constellationLabels = [];
   SkySphere.prototype.overObjectIndex = null;
   SkySphere.prototype.init = function (elementId) {
     var self = this;
@@ -5681,7 +5682,7 @@ SkySphere = function (constellations) {
    * Draw constellations lines and stars and added custom objects.
    * @private
    */
-  SkySphere.prototype.drawSky = function () {
+  SkySphere.prototype.drawSky = function() {
     var context = this.context;
     var i, star, skyPoint, skyPoint1, skyPoint2, radius;
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -5693,81 +5694,110 @@ SkySphere = function (constellations) {
     context.stroke();
     context.strokeStyle = '#aaa';
     for (i = 0; i < this.starLines.length; i++) {
-      star = this.starLines[i];
-      skyPoint1 = star.skyPoint1;
-      skyPoint2 = star.skyPoint2;
-      if (skyPoint1.z > 0 && skyPoint2.z > 0) {
-        context.beginPath();
-        context.moveTo(Math.floor(skyPoint1.x), Math.floor(skyPoint1.y));
-        context.lineTo(Math.floor(skyPoint2.x), Math.floor(skyPoint2.y));
-        context.stroke();
-      }
+        star = this.starLines[i];
+        skyPoint1 = star.skyPoint1;
+        skyPoint2 = star.skyPoint2;
+        if (skyPoint1.z > 0 && skyPoint2.z > 0) {
+            context.beginPath();
+            context.moveTo(Math.floor(skyPoint1.x), Math.floor(skyPoint1.y));
+            context.lineTo(Math.floor(skyPoint2.x), Math.floor(skyPoint2.y));
+            context.stroke();
+        }
     }
     context.fillStyle = '#fff';
     for (i = 0; i < this.starPoints.length; i++) {
-      skyPoint = this.starPoints[i];
-      if (skyPoint.z >= 0) {
-        context.beginPath();
-        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 2, 0, 2 * Math.PI, true);
-        context.fill();
-      }
+        skyPoint = this.starPoints[i];
+        if (skyPoint.z >= 0) {
+            context.beginPath();
+            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 2, 0, 2 * Math.PI, true);
+            context.fill();
+        }
     }
     for (i = 0; i < this.objectPoints.length; i++) {
-      skyPoint = this.objectPoints[i];
-      if (skyPoint.z >= 0) {
-        context.fillStyle = skyPoint.data.color || '#ff0000';
+        skyPoint = this.objectPoints[i];
+        if (skyPoint.z >= 0) {
+            context.fillStyle = skyPoint.data.color || '#ff0000';
+            context.beginPath();
+            radius = skyPoint.data.radius || 2;
+            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
+            context.fill();
+        }
+    }
+
+    // Draw constellation labels
+    context.font = this.options.font || '15px Arial';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    for (i = 0; i < this.constellationLabels.length; i++) {
+        skyPoint = this.constellationLabels[i];
+        if (skyPoint.z >= 0 && skyPoint.data && skyPoint.data.name) {
+            context.fillStyle = skyPoint.data.color || '#ffffff';
+            context.fillText(skyPoint.data.name, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
+        }
+    }
+
+    if (this.overObjectIndex !== null) {
+        var highlightSize = this.options.highlightSize || 3;
+        context.lineWidth = highlightSize;
+        // Draw highlighting circle on object under current mouse position
+        skyPoint = this.objectPoints[this.overObjectIndex];
+        context.strokeStyle = context.fillStyle = this.options.highlightColor || '#ffff00';
         context.beginPath();
         radius = skyPoint.data.radius || 2;
-        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
-        context.fill();
-      }
-    }
-    if (this.overObjectIndex !== null) {
-      var highlightSize = this.options.highlightSize || 3;
-      context.lineWidth = highlightSize;
-      // Draw highlighting circle on object under current mouse position
-      skyPoint = this.objectPoints[this.overObjectIndex];
-      context.strokeStyle = context.fillStyle = this.options.highlightColor || '#ffff00';
-      context.beginPath();
-      radius = skyPoint.data.radius || 2;
-      context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius + highlightSize, 0, 2 * Math.PI, true);
-      context.stroke();
-      // Draw text beside highlighted object
-      if (this.options.getObjectText) {
-        context.font = this.options.font || '15px serif';
-        var text = this.options.getObjectText(skyPoint.data);
-        var textX = skyPoint.x + radius + highlightSize;
-        var textY = skyPoint.y - radius - highlightSize;
-        context.strokeStyle = '#000';
-        context.strokeText(text, textX, textY);
+        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius + highlightSize, 0, 2 * Math.PI, true);
+        context.stroke();
+        // Draw text beside highlighted object
+        if (this.options.getObjectText) {
+            context.font = this.options.font || '15px serif';
+            var text = this.options.getObjectText(skyPoint.data);
+            var textX = skyPoint.x + radius + highlightSize;
+            var textY = skyPoint.y - radius - highlightSize;
+            context.strokeStyle = '#000';
+            context.strokeText(text, textX, textY);
+            context.lineWidth = 1;
+            context.fillText(text, textX, textY);
+        }
         context.lineWidth = 1;
-        context.fillText(text, textX, textY);
-      }
-      context.lineWidth = 1;
     }
+  };
+  SkySphere.prototype.generateConstellationLabel = function(name, ra, dec) {
+    const label = {
+        name: name,
+        ra: ra2rad(ra),
+        dec: dec2rad(dec),
+        color: '#ffffff',
+        radius: 10
+    };
+    const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
+    this.constellationLabels.push(skyPoint);
+    return skyPoint;
   };
   /**
    * Apply a transformation to all elements of the sky.
    * @param {function} transform - function to apply to each sky point passed as argument.
    */
-  SkySphere.prototype.applyTransform = function (transform) {
+  SkySphere.prototype.applyTransform = function(transform) {
     var i;
     // Update constellation lines
     for (i = 0; i < this.starLines.length; i++) {
-      var starLine = this.starLines[i];
-      transform(starLine.skyPoint1);
-      transform(starLine.skyPoint2);
+        var starLine = this.starLines[i];
+        transform(starLine.skyPoint1);
+        transform(starLine.skyPoint2);
     }
     // Update stars
     for (i = 0; i < this.starPoints.length; i++) {
-      transform(this.starPoints[i]);
+        transform(this.starPoints[i]);
     }
     // Update custom objects
     for (i = 0; i < this.objectPoints.length; i++) {
-      transform(this.objectPoints[i]);
+        transform(this.objectPoints[i]);
+    }
+    // Update constellation labels
+    for (i = 0; i < this.constellationLabels.length; i++) {
+        transform(this.constellationLabels[i]);
     }
   };
-  /**
+  /** 
    * Rotate the sphere using the mouse drag.
    * @private
    * @param {float} dx - position offset on x axis.
