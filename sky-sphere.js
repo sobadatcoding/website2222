@@ -5761,8 +5761,11 @@ SkySphere = function (constellations) {
     }
   };
   SkySphere.prototype.generateConstellationLabel = function(name, raHours, raMinutes, raSeconds, decDegrees, decArcminutes, decArcseconds) {
-    const raRadians = (raHours + raMinutes / 60 + raSeconds / 3600) * Math.PI / 12;
-    const decRadians = (decDegrees + decArcminutes / 60 + decArcseconds / 3600) * Math.PI / 180;
+    // Convert RA from hours/minutes/seconds to radians
+    const raRadians = ra2rad((raHours + raMinutes / 60 + raSeconds / 3600) / 24 * 360);
+
+    // Convert DEC from degrees/arcminutes/arcseconds to radians
+    const decRadians = dec2rad(decDegrees + decArcminutes / 60 + decArcseconds / 3600);
 
     const label = {
         name: name,
