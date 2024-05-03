@@ -5682,6 +5682,25 @@ SkySphere = function (constellations) {
    * Draw constellations lines and stars and added custom objects.
    * @private
    */
+  SkySphere.prototype.generateConstellationLabel = function(name, raHours, raMinutes, raSeconds, decDegrees, decArcminutes, decArcseconds) {
+    // Convert RA from hours/minutes/seconds to decimal
+    const raDecimal = raHours + raMinutes / 60 + raSeconds / 3600;
+
+    // Convert DEC from degrees/arcminutes/arcseconds to decimal
+    const decDecimal = decDegrees + decArcminutes / 60 + decArcseconds / 3600;
+
+    const label = {
+        name: name,
+        ra: ra2rad(raDecimal), // Apply ra2rad to the decimal RA
+        dec: dec2rad(decDecimal), // Apply dec2rad to the decimal DEC
+        color: '#ffffff', // Colour control
+        radius: 10
+    };
+
+    const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
+    this.constellationLabels.push(skyPoint);
+    return skyPoint;
+  };
   SkySphere.prototype.drawSky = function() {
     var context = this.context;
     var i, star, skyPoint, skyPoint1, skyPoint2, radius;
@@ -5759,25 +5778,6 @@ SkySphere = function (constellations) {
         }
         context.lineWidth = 1;
     }
-  };
-  SkySphere.prototype.generateConstellationLabel = function(name, raHours, raMinutes, raSeconds, decDegrees, decArcminutes, decArcseconds) {
-    // Convert RA from hours/minutes/seconds to decimal
-    const raDecimal = raHours + raMinutes / 60 + raSeconds / 3600;
-
-    // Convert DEC from degrees/arcminutes/arcseconds to decimal
-    const decDecimal = decDegrees + decArcminutes / 60 + decArcseconds / 3600;
-
-    const label = {
-        name: name,
-        ra: ra2rad(raDecimal), // Apply ra2rad to the decimal RA
-        dec: dec2rad(decDecimal), // Apply dec2rad to the decimal DEC
-        color: '#ffffff',
-        radius: 10
-    };
-
-    const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
-    this.constellationLabels.push(skyPoint);
-    return skyPoint;
   };
   /**
    * Apply a transformation to all elements of the sky.
