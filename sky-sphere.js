@@ -5760,14 +5760,15 @@ SkySphere = function (constellations) {
         context.lineWidth = 1;
     }
   };
-  SkySphere.prototype.generateConstellationLabel = function(name, ra, dec) {
+  SkySphere.prototype.generateConstellationLabel = function(name, raRadians, decRadians) {
     const label = {
         name: name,
-        ra: ra2rad(ra),
-        dec: dec2rad(dec),
-        color: '#ffffff', // You can customize the label color here
-        radius: 10 // Adjust the label size as needed
+        ra: raRadians,
+        dec: decRadians,
+        color: '#ffffff',
+        radius: 10
     };
+
     const skyPoint = this.generateSkyPoint(label.ra, label.dec, label);
     this.constellationLabels.push(skyPoint);
     return skyPoint;
