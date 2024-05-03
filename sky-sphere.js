@@ -5771,7 +5771,7 @@ SkySphere = function (constellations) {
         name: name,
         ra: ra2rad(raDecimal), // Apply ra2rad to the decimal RA
         dec: dec2rad(decDecimal), // Apply dec2rad to the decimal DEC
-        color: '#ffff00',
+        color: '#ffffff',
         radius: 10
     };
 
