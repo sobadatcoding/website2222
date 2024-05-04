@@ -5736,7 +5736,7 @@ SkySphere = function (constellations) {
         skyPoint = this.starPoints[i];
         if (skyPoint.z >= 0) {
             context.beginPath();
-            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 1.2, 0, 2 * Math.PI, true);
+            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 1.8, 0, 2 * Math.PI, true);
             context.fill();
         }
     }
@@ -5745,7 +5745,7 @@ SkySphere = function (constellations) {
         if (skyPoint.z >= 0) {
             context.fillStyle = skyPoint.data.color || '#ff0000';
             context.beginPath();
-            radius = skyPoint.data.radius || 1.2;
+            radius = skyPoint.data.radius || 1.8;
             context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
             context.fill();
         }
@@ -5770,7 +5770,7 @@ SkySphere = function (constellations) {
         skyPoint = this.objectPoints[this.overObjectIndex];
         context.strokeStyle = context.fillStyle = this.options.highlightColor || '#ffff00';
         context.beginPath();
-        radius = skyPoint.data.radius || 2;
+        radius = skyPoint.data.radius || 1.8;
         context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius + highlightSize, 0, 2 * Math.PI, true);
         context.stroke();
         // Draw text beside highlighted object
@@ -5945,7 +5945,7 @@ SkySphere = function (constellations) {
    */
   SkySphere.prototype.addCustomObject = function (ra, dec, data) {
     data = data || {};
-    data.radius = data.radius || 1; // Change the default radius to 1
+    data.radius = data.radius || 1.8; // Change the default radius to 1
     var skyPoint = this.generateSkyPoint(ra2rad(ra), dec2rad(dec), data);
     this.objectPoints.push(skyPoint);
     return skyPoint;
