@@ -5709,24 +5709,6 @@ SkySphere = function (constellations) {
     this.constellationLabels.push(skyPoint);
     return skyPoint;
   };
-  SkySphere.prototype.createStarPattern = function(context, x, y, radius) {
-    const patternCanvas = document.createElement('canvas');
-    const patternCtx = patternCanvas.getContext('2d');
-    const size = radius * 2;
-    patternCanvas.width = patternCanvas.height = size;
-  
-    // Draw the star pattern on the temporary canvas
-    patternCtx.fillStyle = 'yellow';
-    patternCtx.beginPath();
-    patternCtx.arc(radius, radius, radius * 0.25, 0, 2 * Math.PI);
-    patternCtx.fill();
-    patternCtx.fillStyle = 'rgba(255, 255, 0, 0.4)';
-    patternCtx.beginPath();
-    patternCtx.arc(radius, radius, radius * 0.7, 0, 2 * Math.PI);
-    patternCtx.fill();
-  
-    return context.createPattern(patternCanvas, 'no-repeat');
-  };
   SkySphere.prototype.drawSky = function() {
     var context = this.context;
     var i, star, skyPoint, skyPoint1, skyPoint2, radius;
@@ -5768,18 +5750,6 @@ SkySphere = function (constellations) {
             context.fill();
         }
     } 
-    const supportsRadialGradient = typeof context.createRadialGradient === 'function';
-    for (i = 0; i < this.starPoints.length; i++) {
-    skyPoint = this.starPoints[i];
-    if (skyPoint.z >= 0) {
-      context.fillStyle = supportsRadialGradient
-        ? this.createStarGradient(context, Math.floor(skyPoint.x), Math.floor(skyPoint.y), 5)
-        : this.createStarPattern(context, Math.floor(skyPoint.x), Math.floor(skyPoint.y), 5);
-      context.beginPath();
-      context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 2, 0, 2 * Math.PI, true);
-      context.fill();
-    }
-    }
 
     // Draw constellation labels
     context.font = this.options.font || '13px serif';
