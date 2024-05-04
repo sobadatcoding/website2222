@@ -5713,13 +5713,13 @@ SkySphere = function (constellations) {
     var context = this.context;
     var i, star, skyPoint, skyPoint1, skyPoint2, radius;
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    context.fillStyle = this.options.backgroundColor || '#000';
-    context.strokeStyle = '#666';
+    context.fillStyle = this.options.backgroundColor || '#00008B';
+    context.strokeStyle = '#40E0D0';
     context.beginPath();
     context.arc(this.containerWidth / 2, this.containerHeight / 2, this.radius, 0, 2 * Math.PI, true);
     context.fill();
     context.stroke();
-    context.strokeStyle = '#aaa';
+    context.strokeStyle = '#40E0D0';
     for (i = 0; i < this.starLines.length; i++) {
         star = this.starLines[i];
         skyPoint1 = star.skyPoint1;
@@ -5731,7 +5731,7 @@ SkySphere = function (constellations) {
             context.stroke();
         }
     }
-    context.fillStyle = '#fff';
+    context.fillStyle = '#FFD700';
     for (i = 0; i < this.starPoints.length; i++) {
         skyPoint = this.starPoints[i];
         if (skyPoint.z >= 0) {
