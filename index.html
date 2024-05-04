@@ -19,24 +19,18 @@
 <canvas id="sky"></canvas>
 <script src="sky-sphere.js"></script>
 <script>
-    // Load the background image
-    var backgroundImage = new Image();
-    backgroundImage.src = '168595-space-stars.jpg'; // Replace with the actual path to your image file
+    var sky = new SkySphere('sky', {
+        width: 650,
+        height: 650,
+        customOnClick: function(data) {
+            // Define your custom action for added objects.
+        }
+    });
 
-    backgroundImage.onload = function() {
-        var sky = new SkySphere('sky', {
-            width: 650,
-            height: 650,
-            customOnClick: function(data) {
-                /* Define your custom action for added objects. */
-            },
-            backgroundImage: backgroundImage /* Pass the loaded image to the SkySphere constructor */
-        });
+    // Create the SkySphere instance and add constellation labels here
+    const skySphere = sky; // Use the existing 'sky' instance
 
-        // Create the SkySphere instance and add constellation labels here
-        const skySphere = sky; // Use the existing 'sky' instance
-
-        // Add constellation labels
+    // Add constellation labels
     skySphere.generateConstellationLabel('Andromeda', 0, 58, 30, 36, 8, 22);
     skySphere.generateConstellationLabel('Antila', 10, 14, 29.3, -33, -39, -11.8);
     skySphere.generateConstellationLabel('Apus', 15, 52, 49.2, -78, -42, -41.9);
@@ -125,10 +119,8 @@
     skySphere.generateConstellationLabel('Virgo', 13, 25, 42, -2, -7, -0.3);
     skySphere.generateConstellationLabel('Volans', 8, 4, 45, -69, -2, -19.3);
     skySphere.generateConstellationLabel('Vulpecula', 19, 45, 41.4, 26, 19, 9.1);
-        // ... (rest of the constellation labels)
 
     sky.drawSky();
-    };
 </script>
 </body>
 </html>

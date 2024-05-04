@@ -5712,99 +5712,79 @@ SkySphere = function (constellations) {
   SkySphere.prototype.drawSky = function() {
     var context = this.context;
     var i, star, skyPoint, skyPoint1, skyPoint2, radius;
-    
-    // Clear the canvas
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  
-    // Draw the background image
-    if (this.options.backgroundImage) {
-      context.save();
-      context.beginPath();
-      context.arc(this.containerWidth / 2, this.containerHeight / 2, this.radius, 0, 2 * Math.PI, true);
-      context.closePath();
-      context.clip();
-      context.drawImage(this.options.backgroundImage, 0, 0, this.containerWidth, this.containerHeight);
-      context.restore();
-    } else {
-      // If no background image is provided, fill with the default background color
-      context.fillStyle = this.options.backgroundColor || '#00008B';
-      context.beginPath();
-      context.arc(this.containerWidth / 2, this.containerHeight / 2, this.radius, 0, 2 * Math.PI, true);
-      context.fill();
-    }
-    
+    context.fillStyle = this.options.backgroundColor || '#00008B';
     context.strokeStyle = '#40E0D0';
     context.beginPath();
     context.arc(this.containerWidth / 2, this.containerHeight / 2, this.radius, 0, 2 * Math.PI, true);
+    context.fill();
     context.stroke();
-  
+    context.strokeStyle = '#40E0D0';
     for (i = 0; i < this.starLines.length; i++) {
-      star = this.starLines[i];
-      skyPoint1 = star.skyPoint1;
-      skyPoint2 = star.skyPoint2;
-      if (skyPoint1.z > 0 && skyPoint2.z > 0) {
-        context.beginPath();
-        context.moveTo(Math.floor(skyPoint1.x), Math.floor(skyPoint1.y));
-        context.lineTo(Math.floor(skyPoint2.x), Math.floor(skyPoint2.y));
-        context.stroke();
-      }
+        star = this.starLines[i];
+        skyPoint1 = star.skyPoint1;
+        skyPoint2 = star.skyPoint2;
+        if (skyPoint1.z > 0 && skyPoint2.z > 0) {
+            context.beginPath();
+            context.moveTo(Math.floor(skyPoint1.x), Math.floor(skyPoint1.y));
+            context.lineTo(Math.floor(skyPoint2.x), Math.floor(skyPoint2.y));
+            context.stroke();
+        }
     }
-  
     context.fillStyle = '#FFD700';
     for (i = 0; i < this.starPoints.length; i++) {
-      skyPoint = this.starPoints[i];
-      if (skyPoint.z >= 0) {
-        context.beginPath();
-        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 1.8, 0, 2 * Math.PI, true);
-        context.fill();
-      }
+        skyPoint = this.starPoints[i];
+        if (skyPoint.z >= 0) {
+            context.beginPath();
+            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), 1.8, 0, 2 * Math.PI, true);
+            context.fill();
+        }
     }
-  
     for (i = 0; i < this.objectPoints.length; i++) {
-      skyPoint = this.objectPoints[i];
-      if (skyPoint.z >= 0) {
-        context.fillStyle = skyPoint.data.color || '#ff0000';
-        context.beginPath();
-        radius = skyPoint.data.radius || 1.8;
-        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
-        context.fill();
-      }
-    }
-  
+        skyPoint = this.objectPoints[i];
+        if (skyPoint.z >= 0) {
+            context.fillStyle = skyPoint.data.color || '#ff0000';
+            context.beginPath();
+            radius = skyPoint.data.radius || 1.8;
+            context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
+            context.fill();
+        }
+    } 
+
     // Draw constellation labels
     context.font = this.options.font || '13px serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     for (i = 0; i < this.constellationLabels.length; i++) {
-      skyPoint = this.constellationLabels[i];
-      if (skyPoint.z >= 0 && skyPoint.data && skyPoint.data.name) {
-        context.fillStyle = skyPoint.data.color || '#ffffff';
-        context.fillText(skyPoint.data.name, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
-      }
+        skyPoint = this.constellationLabels[i];
+        if (skyPoint.z >= 0 && skyPoint.data && skyPoint.data.name) {
+            context.fillStyle = skyPoint.data.color || '#ffffff';
+            context.fillText(skyPoint.data.name, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
+        }
     }
-  
+
     if (this.overObjectIndex !== null) {
-      var highlightSize = this.options.highlightSize || 3;
-      context.lineWidth = highlightSize;
-      // Draw highlighting circle on object under current mouse position
-      skyPoint = this.objectPoints[this.overObjectIndex];
-      context.strokeStyle = context.fillStyle = this.options.highlightColor || '#ffff00';
-      context.beginPath();
-      radius = skyPoint.data.radius || 1.8;
-      context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius + highlightSize, 0, 2 * Math.PI, true);
-      context.stroke();
-      // Draw text beside highlighted object
-      if (this.options.getObjectText) {
-        context.font = this.options.font || '15px serif';
-        var text = this.options.getObjectText(skyPoint.data);
-        var textX = skyPoint.x + radius + highlightSize;
-        var textY = skyPoint.y - radius - highlightSize;
-        context.strokeStyle = '#000';
-        context.strokeText(text, textX, textY);
+        var highlightSize = this.options.highlightSize || 3;
+        context.lineWidth = highlightSize;
+        // Draw highlighting circle on object under current mouse position
+        skyPoint = this.objectPoints[this.overObjectIndex];
+        context.strokeStyle = context.fillStyle = this.options.highlightColor || '#ffff00';
+        context.beginPath();
+        radius = skyPoint.data.radius || 1.8;
+        context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius + highlightSize, 0, 2 * Math.PI, true);
+        context.stroke();
+        // Draw text beside highlighted object
+        if (this.options.getObjectText) {
+            context.font = this.options.font || '15px serif';
+            var text = this.options.getObjectText(skyPoint.data);
+            var textX = skyPoint.x + radius + highlightSize;
+            var textY = skyPoint.y - radius - highlightSize;
+            context.strokeStyle = '#000';
+            context.strokeText(text, textX, textY);
+            context.lineWidth = 1;
+            context.fillText(text, textX, textY);
+        }
         context.lineWidth = 1;
-        context.fillText(text, textX, textY);
-      }
-      context.lineWidth = 1;
     }
   };
   /**
