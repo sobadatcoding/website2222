@@ -5751,16 +5751,18 @@ SkySphere = function (constellations) {
         }
     } 
 
-    // Draw constellation labels
     context.font = this.options.font || '15px Helvetica';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
+    context.fillStyle = '#ffffff';
     for (i = 0; i < this.constellationLabels.length; i++) {
         skyPoint = this.constellationLabels[i];
         if (skyPoint.z >= 0 && skyPoint.data && skyPoint.data.name) {
-            context.fillStyle = skyPoint.data.color || '#ffffff';
-            context.fillText(skyPoint.data.name, Math.floor(skyPoint.x), Math.floor(skyPoint.y));
-        }
+            context.save();
+            context.translate(Math.floor(skyPoint.x), Math.floor(skyPoint.y));
+            context.fillText(skyPoint.data.name, 0, 0);
+            context.restore();
+        } 
     }
 
     if (this.overObjectIndex !== null) {
