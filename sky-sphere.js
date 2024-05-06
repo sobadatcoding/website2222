@@ -5749,8 +5749,10 @@ SkySphere = function (constellations) {
             context.arc(Math.floor(skyPoint.x), Math.floor(skyPoint.y), radius, 0, 2 * Math.PI, true);
             context.fill();
         }
-    } 
+    }
 
+    // Draw constellation labels with high-quality text rendering
+    context.textRendering = 'geometricPrecision';
     context.font = this.options.font || '15px Helvetica';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
@@ -5759,10 +5761,11 @@ SkySphere = function (constellations) {
         skyPoint = this.constellationLabels[i];
         if (skyPoint.z >= 0 && skyPoint.data && skyPoint.data.name) {
             context.save();
-            context.translate(Math.floor(skyPoint.x), Math.floor(skyPoint.y));
+            context.translate(skyPoint.x, skyPoint.y);
+            context.scale(1 / this.zoomFactor, 1 / this.zoomFactor); // Apply inverse zoom scale
             context.fillText(skyPoint.data.name, 0, 0);
             context.restore();
-        } 
+        }
     }
 
     if (this.overObjectIndex !== null) {
