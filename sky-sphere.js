@@ -5671,6 +5671,16 @@ SkySphere = function (constellations) {
         self.zoom(e.wheelDeltaY < 0 ? 0.9 : 1.1);
       }
     });
+    var zoomInButton = document.getElementById('zoom-in');
+    var zoomOutButton = document.getElementById('zoom-out');
+
+    zoomInButton.addEventListener('click', function () {
+        self.zoom(1.1); // Adjust the zoom factor as needed
+    });
+
+    zoomOutButton.addEventListener('click', function () {
+        self.zoom(0.9); // Adjust the zoom factor as needed
+    });
   };
   SkySphere.prototype.setRadius = function (radius) {
     this.zoom(radius / this.radius);
@@ -5752,7 +5762,7 @@ SkySphere = function (constellations) {
     } 
 
     // Draw constellation labels
-    context.font = this.options.font || '13px serif';
+    context.font = this.options.font || '13px Times';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     for (i = 0; i < this.constellationLabels.length; i++) {
