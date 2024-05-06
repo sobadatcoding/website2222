@@ -5906,10 +5906,10 @@ SkySphere = function (constellations) {
     var centerX = this.containerWidth / 2;
     var centerY = this.containerHeight / 2;
     this.applyTransform(function (skyPoint) {
-      self.zoomFactor = zoomFactor;
-      skyPoint.x = zoomFactor * (skyPoint.x - centerX) + centerX;
-      skyPoint.y = zoomFactor * (skyPoint.y - centerY) + centerY;
-      skyPoint.z = zoomFactor * skyPoint.z;
+        self.zoomFactor = zoomFactor;
+        skyPoint.x = zoomFactor * (skyPoint.x - centerX) + centerX;
+        skyPoint.y = zoomFactor * (skyPoint.y - centerY) + centerY;
+        skyPoint.z = zoomFactor * skyPoint.z;
     });
     this.drawSky();
   };
