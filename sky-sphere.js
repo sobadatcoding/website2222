@@ -5592,6 +5592,15 @@ SkySphere = function (constellations) {
       x = startX - clientRect.left;
       y = startY - clientRect.top;
       self.overObjectIndex = null;
+    
+      // Store initial touch points for pinch zoom
+      if (event.touches && event.touches.length === 2) {
+        self.initialPinchDistance = Math.hypot(
+          event.touches[0].clientX - event.touches[1].clientX,
+          event.touches[0].clientY - event.touches[1].clientY
+        );
+      }
+    
       if (supportTouch) {
         window.addEventListener('touchmove', onMove, false);
         window.addEventListener('touchend', stopMove, false);
@@ -5604,9 +5613,14 @@ SkySphere = function (constellations) {
     }
     function onMove(event) {
       e = event.touches && event.touches.length > 0 ? event.touches[0] : event;
-      self.rotateXY((e.clientX - prevX) / self.radius, (e.clientY - prevY) / self.radius);
-      prevX = e.clientX;
-      prevY = e.clientY;
+    
+      if (event.touches && event.touches.length === 2) {
+        handlePinchZoom(event);
+      } else {
+        self.rotateXY((e.clientX - prevX) / self.radius, (e.clientY - prevY) / self.radius);
+        prevX = e.clientX;
+        prevY = e.clientY;
+      }
       nextFrame();
     }
     function stopMove() {
@@ -5629,6 +5643,17 @@ SkySphere = function (constellations) {
           }
         }
       }
+    }
+    function handlePinchZoom(event) {
+      const currentPinchDistance = Math.hypot(
+        event.touches[0].clientX - event.touches[1].clientX,
+        event.touches[0].clientY - event.touches[1].clientY
+      );
+    
+      const zoomFactor = currentPinchDistance / self.initialPinchDistance;
+      self.zoom(zoomFactor);
+    
+      self.initialPinchDistance = currentPinchDistance;
     }
     if (supportTouch) {
       this.canvas.addEventListener('touchstart', startMove);
